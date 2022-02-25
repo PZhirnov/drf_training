@@ -27,6 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+AUTH_USER_MODEL = 'authapp.LibUser'
 
 # Application definition
 
@@ -39,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'library',
     'authors.apps.AuthorsConfig',
+    'authapp.apps.AuthappConfig',
     'rest_framework',
 ]
 
