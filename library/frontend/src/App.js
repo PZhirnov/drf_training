@@ -2,6 +2,8 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 import AuthorLIst from './components/Author';
+import Menu from './components/Menu';
+import Footer from './components/Footer';
 import axios from 'axios';
 
 class App extends React.Component {
@@ -21,8 +23,7 @@ class App extends React.Component {
                             'authors': authors
                         }
                     )
-            }).catch(error => console.log(error))
-
+            }).catch(error => console.log(error));
     }
 
     /*componentDidMount() {
@@ -48,7 +49,9 @@ class App extends React.Component {
     render() {
         return (
             <div>
+                <Menu />
                 <AuthorLIst authors={this.state.authors} />
+                <Footer />
             </div>
         )
     }

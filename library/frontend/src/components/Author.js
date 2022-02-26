@@ -18,7 +18,7 @@ const AuthorItem = ({ author }) => {
 
 const AuthorLIst = ({ authors }) => {
     return (
-        <table>
+        <table class="table">
             <th>
                 First name
             </th>
