@@ -1,5 +1,7 @@
 from rest_framework import serializers
 from uuid import uuid4
+import rest_framework.settings
+
 
 # Описание классов модели
 class Author:
