@@ -1,8 +1,12 @@
 from django.shortcuts import render
 from rest_framework.renderers import JSONRenderer, BrowsableAPIRenderer, StaticHTMLRenderer, AdminRenderer
+from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.views import APIView
 from .models import Author, Book, Article, Biography
-from .serializers import BookSerializer, AuthorSerializer, ArticleSerializer, BiographySerializer
+from .serializers import BookSerializer, AuthorSerializer, ArticleSerializer, BiographySerializer, \
+    SimpleAuthorSerializer
+
 
 # Create your views here.
 
@@ -14,6 +18,24 @@ from .serializers import BookSerializer, AuthorSerializer, ArticleSerializer, Bi
 # 4.	BrowsableAPIRenderer — преобразует данные для удобной работы с API в брауезере.
 # 5.	AdminRenderer — преобразует данные для удобного администрирования.
 
+
+class AuthorApiView(APIView):
+
+    renderer_classes = [JSONRenderer]
+
+    def get(self, request):
+        print(request.query_params)
+        name = request.query_params['name']
+        print(name)
+        authors = Author.objects.filter(first_name__contains=name)
+        # print(dir(request))
+        serializer = AuthorSerializer(authors, many=True, context={'request': request})
+        # print(serializer.data)
+        return Response(serializer.data)
+
+    def post(self, request):
+        print(dir(request))
+        return Response({request.query_params['name']})
 
 
 class AuthorModelViewSet(ModelViewSet):
