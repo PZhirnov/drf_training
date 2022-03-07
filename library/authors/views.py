@@ -35,7 +35,8 @@ class AuthorApiView(APIView):
 
     def post(self, request):
         print(dir(request))
-        return Response({request.query_params['name']})
+        print(request.data)
+        return Response(request.data)
 
 
 class AuthorModelViewSet(ModelViewSet):
