@@ -6,6 +6,7 @@ from rest_framework.views import APIView
 from .models import Author, Book, Article, Biography
 from .serializers import BookSerializer, AuthorSerializer, ArticleSerializer, BiographySerializer, \
     SimpleAuthorSerializer
+from rest_framework.permissions import IsAuthenticated, AllowAny
 
 
 # Create your views here.
@@ -20,7 +21,7 @@ from .serializers import BookSerializer, AuthorSerializer, ArticleSerializer, Bi
 
 
 class AuthorApiView(APIView):
-
+    permission_classes = [AllowAny]
     renderer_classes = [JSONRenderer]
 
     def get(self, request):
@@ -41,6 +42,7 @@ class AuthorApiView(APIView):
 
 class AuthorModelViewSet(ModelViewSet):
     # если нужно, то в отдельных вьюхах можно выбирать нужный вид ренедра
+    permission_classes = [AllowAny]
     renderer_classes = [JSONRenderer, BrowsableAPIRenderer]
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
