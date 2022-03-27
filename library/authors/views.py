@@ -42,7 +42,7 @@ class AuthorApiView(APIView):
 
 class AuthorModelViewSet(ModelViewSet):
     # если нужно, то в отдельных вьюхах можно выбирать нужный вид ренедра
-    permission_classes = [AllowAny]
+    # permission_classes = [AllowAny]
     renderer_classes = [JSONRenderer, BrowsableAPIRenderer]
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
