@@ -18,6 +18,7 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from authors.views import AuthorModelViewSet, BookModelViewSet, ArticleModelViewSet, BiographyModelViewSet, \
     AuthorApiView
+from rest_framework.authtoken import views
 
 router = DefaultRouter()
 router.register('authors', AuthorModelViewSet)
@@ -32,4 +33,5 @@ urlpatterns = [
     path('api/', include(router.urls)),
     path('', include(router.urls)),
     path('api-view/', AuthorApiView.as_view()),
+    path('api-token-auth/', views.obtain_auth_token),
 ]

@@ -21,7 +21,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 
 
 class AuthorApiView(APIView):
-    permission_classes = [AllowAny]
+    # permission_classes = [AllowAny]
     renderer_classes = [JSONRenderer]
 
     def get(self, request):
@@ -49,6 +49,7 @@ class AuthorModelViewSet(ModelViewSet):
 
 
 class BookModelViewSet(ModelViewSet):
+    permission_classes = [IsAuthenticated]
     queryset = Book.objects.all()
     serializer_class = BookSerializer
 
