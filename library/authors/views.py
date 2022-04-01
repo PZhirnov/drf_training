@@ -21,7 +21,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 
 
 class AuthorApiView(APIView):
-    # permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     renderer_classes = [JSONRenderer]
 
     def get(self, request):
@@ -42,14 +42,14 @@ class AuthorApiView(APIView):
 
 class AuthorModelViewSet(ModelViewSet):
     # если нужно, то в отдельных вьюхах можно выбирать нужный вид ренедра
-    # permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     renderer_classes = [JSONRenderer, BrowsableAPIRenderer]
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
 
 
 class BookModelViewSet(ModelViewSet):
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
     queryset = Book.objects.all()
     serializer_class = BookSerializer
 

@@ -34,54 +34,86 @@ class App extends React.Component {
         };
     }
 
-    componentDidMount() {
-        axios.get('http://127.0.0.1:8000/api/authors/')
-            .then(Response => {
-                const authors = Response.data
-                console.log(authors);
-                    this.setState(
-                        {
-                            'authors': authors
-                        }
-                    )
-            }).catch(error => console.log(error));
-        axios.get('http://127.0.0.1:8000/api/books/')
-            .then(Response => {
-                const books = Response.data
-                console.log(books)
-                    this.setState(
-                        {
-                            'books': books
-                        }
-                    )
-            }).catch(error => console.log(error));
+    set_token (token) {
+        const cookies = new Cookies()
+        cookies.set('token', token)
+        this.setState({'token': token}, () => this.load_data())  
     }
 
-    /*componentDidMount() {
-        const authors = [
-            {
-                'first_name': 'Федор',
-                'last_name': 'Достоевский',
-                'birthday_year': 1821
-            },
-            {
-                'first_name': 'Александр',
-                'last_name': 'Грин',
-                'birthday_year': 1880
-            },
-        ]
-        this.setState(
-            {
-                'authors': authors
-            }
-        )
-    }*/
+    is_authenticated() {
+        //console.log(this.state.token)
+        return this.state.token != ''
+    }
+
+    logout() {
+        this.set_token('')
+    }
+
+    get_token_from_storage() {
+        const cookies = new Cookies()
+        const token = cookies.get('token')
+        this.setState({'token': token}, () => this.load_data())
+    }
+
     get_token(username, password) {
         axios.post('http://127.0.0.1:8000/api-token-auth/', {username: username, password: password})
         .then(response => {
-        console.log(response.data)
+            this.set_token(response.data['token'])
         }).catch(error => alert('Неверный логин или пароль'))
+    }
+
+    get_headers() {
+        console.log('сработал')
+        let headers = {
+            'Content-Type': 'application/json'
         }
+        if (this.is_authenticated())
+        {
+            headers['Authorization'] = 'Token ' + this.state.token
+        }
+        return headers
+    }
+
+    
+    get_token(username, password) {
+    axios.post('http://127.0.0.1:8000/api-token-auth/', {username: username,
+    password: password})
+    .then(response => {
+    this.set_token(response.data['token'])
+    }).catch(error => alert('Неверный логин или пароль'))
+    }
+    get_headers() {
+    let headers = {
+    'Content-Type': 'application/json'
+    }
+    if (this.is_authenticated())
+    {
+    headers['Authorization'] = 'Token ' + this.state.token
+    }
+    return headers
+    }
+    load_data() {
+        const headers = this.get_headers()
+        axios.get('http://127.0.0.1:8000/api/authors/', {headers})
+        .then(response => {
+        this.setState({authors: response.data})
+        }).catch(error => {
+            console.log(error)
+            this.setState({authors: []})
+        })
+        
+        axios.get('http://127.0.0.1:8000/api/books/', {headers})
+        .then(response => {
+        this.setState({books: response.data})
+        }).catch(error => {
+        console.log(error)
+        this.setState({books: []})
+        })
+    }
+
+    componentDidMount() {
+        this.get_token_from_storage();
+    }
 
     render() {
         return (
@@ -99,7 +131,7 @@ class App extends React.Component {
                                 <Link to='/books/'>Книги</Link>
                             </li>
                             <li class="nav-item">
-                                <Link to='/login'>Login</Link>
+                                {this.is_authenticated() ? <button onClick={()=>this.logout()}>Logout</button> : <Link to='/login'>Login</Link>}
                             </li>
                         </ul>
                     <Switch>
@@ -107,7 +139,6 @@ class App extends React.Component {
                         <Route exact path='/books/' component={() => <BookList books={this.state.books} />}></Route>
                         <Route exact path='/' component={main_page}></Route>
                         <Route exact path='/login' component={() => <LoginForm get_token={(username, password) => this.get_token(username, password)} />} />
-
                     </Switch>
                     
                 </BrowserRouter>
