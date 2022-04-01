@@ -7,14 +7,14 @@ class SimpleAuthorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Author
         # fields = '__all__'
-        fields = ['url', 'uid', 'first_name', 'last_name', 'birthday_year']
+        fields = ['id', 'url', 'first_name', 'last_name', 'birthday_year']
 
 
 class AuthorSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Author
         # fields = '__all__'
-        fields = ['url', 'uid', 'first_name', 'last_name', 'birthday_year']
+        fields = ['id', 'url', 'first_name', 'last_name', 'birthday_year']
 
 
 class BiographySerializer(serializers.HyperlinkedModelSerializer):
@@ -39,10 +39,11 @@ class BookSerializer(serializers.HyperlinkedModelSerializer):
     # 2.	PrimaryKeyRelatedField — представляет объект его id (используется по умолчанию).
     # 3.	HyperlinkedRelatedField — представляет объект гипперссылкой. Обычно она ведёт на страницу detail этого объекта.
     # 4.	SlugRelatedField — позволяет указать несколько полей для отображения объекта.
-
     # authors = serializers.StringRelatedField(many=True)
     # authors = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     # authors = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name='AuthorModelViewSet')
+    authors = serializers.StringRelatedField(many=True)
+
     class Meta:
         model = Book
         fields = '__all__'
