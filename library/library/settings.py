@@ -31,6 +31,10 @@ CORS_ALLOWED_ORIGINS = [
    "http://localhost:3000",
 ]
 
+GRAPHENE = {
+    "SCHEMA": "library.schema.schema",
+}
+
 AUTH_USER_MODEL = 'authapp.LibUser'
 
 # Application definition
@@ -49,6 +53,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework.authtoken',
     'rest_framework_simplejwt',
+    'manytest.apps.ManytestConfig',
+    'graphene_django',
 ]
 
 MIDDLEWARE = [
