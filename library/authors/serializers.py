@@ -1,3 +1,5 @@
+import uuid
+
 from rest_framework import serializers
 from rest_framework.serializers import HyperlinkedModelSerializer
 from .models import Author, Article, Biography, Book
@@ -47,3 +49,26 @@ class BookSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Book
         fields = '__all__'
+
+
+class SimpleBookSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Book
+        fields = '__all__'
+
+
+class AnswSerializers(serializers.Serializer):
+    answ = serializers.CharField(max_length=126)
+    created = serializers.DateTimeField()
+    modify = serializers.BooleanField()
+    randint = serializers.IntegerField()
+
+class CommentSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    content = serializers.CharField(max_length=200)
+    created = serializers.DateTimeField()
+    g = serializers.UUIDField(default=uuid.uuid4())
+    answ = AnswSerializers()
+    book = serializers.JSONField()
+    book_name = serializers.CharField(source='book_name.name', max_length=100)

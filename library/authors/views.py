@@ -1,12 +1,16 @@
+import random
+import uuid
+
 from django.shortcuts import render
-from rest_framework.renderers import JSONRenderer, BrowsableAPIRenderer, StaticHTMLRenderer, AdminRenderer
+from rest_framework.renderers import JSONRenderer, BrowsableAPIRenderer, StaticHTMLRenderer, AdminRenderer, OrderedDict
 from rest_framework.response import Response
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.viewsets import ModelViewSet, ViewSet
 from rest_framework.views import APIView
 from .models import Author, Book, Article, Biography
 from .serializers import BookSerializer, AuthorSerializer, ArticleSerializer, BiographySerializer, \
-    SimpleAuthorSerializer
+    SimpleAuthorSerializer, CommentSerializer, SimpleBookSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
+from datetime import datetime
 
 
 # Create your views here.
@@ -62,3 +66,49 @@ class ArticleModelViewSet(ModelViewSet):
 class BiographyModelViewSet(ModelViewSet):
     queryset = Biography.objects.all()
     serializer_class = BiographySerializer
+
+
+
+# Проработка
+class Comment:
+    def __init__(self, email, content, created=None, answ=None, book=None, book_name=None):
+        self.email = email
+        self.content = content
+        self.created = created or datetime.now()
+        self.answ = answ
+        self.book = book
+        self.g = uuid.uuid4()
+        self.book_name = book_name
+
+class answ:
+    def __init__(self, answ, created=None):
+        self.answ = answ
+        self.created = created or datetime.now()
+        self.modify = True
+        self.randint = random.randint(1, 100)
+
+
+class CommentView(ViewSet):
+    permission_classes = [AllowAny]
+    renderer_classes = [JSONRenderer]
+
+    def list(self, request):
+        print('test')
+        book = Book.objects.all()
+        # print(book.values())
+        queryset = []
+        for i in range(100):
+            rint = random.randint(1, len(book))
+            json_book = SimpleBookSerializer(book, many=True).data[max(rint-2, 0):rint]
+            # book_name = SimpleBookSerializer(book)
+            add_answ = answ(answ=f'данные {i}')
+            comment = Comment(email='pavel-zh@inbox.ru', content='my tasks', answ=add_answ, book=json_book, book_name=book[1])
+            queryset.append(comment)
+        comment_serializer = CommentSerializer(instance=queryset, many=True)
+        json = JSONRenderer().render(comment_serializer.data)
+        print(json)
+        print(type(comment_serializer))
+        print(type(json))
+        return Response(comment_serializer.data)
+
+

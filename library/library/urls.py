@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from authors.views import AuthorModelViewSet, BookModelViewSet, ArticleModelViewSet, BiographyModelViewSet, \
-    AuthorApiView
+    AuthorApiView, CommentView
 from rest_framework.authtoken import views
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
 from graphene_django.views import GraphQLView
@@ -41,4 +41,5 @@ urlpatterns = [
     path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     path('many/', include('manytest.urls')),
     path('graphql/', GraphQLView.as_view(graphiql=True)),
+    path('test/', CommentView.as_view({'get': 'list'})),
 ]
