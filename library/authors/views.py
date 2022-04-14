@@ -57,6 +57,14 @@ class BookModelViewSet(ModelViewSet):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
 
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            print('сработал')
+            print(self.request.data, self.request.headers)
+            return SimpleBookSerializer
+        print('не сработал')
+        return BookSerializer
+
 
 class ArticleModelViewSet(ModelViewSet):
     queryset = Article.objects.all()

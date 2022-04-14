@@ -35,7 +35,7 @@ class ArticleSerializer(serializers.HyperlinkedModelSerializer):
         exclude = ['name']
 
 
-class BookSerializer(serializers.HyperlinkedModelSerializer):
+class BookSerializer(serializers.ModelSerializer):
     # https: // www.django - rest - framework.org / api - guide / relations /
     # 1.	StringRelatedField — представляет объект методом __str__.
     # 2.	PrimaryKeyRelatedField — представляет объект его id (используется по умолчанию).
@@ -52,7 +52,6 @@ class BookSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class SimpleBookSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Book
         fields = '__all__'
